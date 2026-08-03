@@ -45,7 +45,16 @@ function NewAudit() {
   const repos = useQuery({ queryKey: ["repos"], queryFn: () => fetchRepos() });
 
   async function start(
-    payload: Parameters<typeof create>[0] extends { data: infer D } ? D : never,
+    payload: {
+      name: string;
+      sourceType: "paste" | "upload" | "github";
+      language?: string | undefined;
+      filename?: string;
+      repoFullName?: string;
+      repoBranch?: string;
+      fileCount: number;
+      lineCount: number;
+    },
     analysisFiles?: { path: string; content: string }[],
   ) {
     setBusy(true);
@@ -159,8 +168,8 @@ function NewAudit() {
                 </SelectTrigger>
                 <SelectContent>
                   {LANGUAGES.map((lang) => (
-                    <SelectItem key={lang} value={lang}>
-                      {lang}
+                    <SelectItem key={lang.value} value={lang.value}>
+                      {lang.label}
                     </SelectItem>
                   ))}
                 </SelectContent>
