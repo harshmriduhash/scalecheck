@@ -200,7 +200,7 @@ export const setIssueStatus = createServerFn({ method: "POST" })
 export const getAccountOverview = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    const [{ data: profile }, { data: sub }, { data: audits }, { data: conn }] = await Promise.all([
+    const [{ data: profile }, { data: sub }, { data: audits }] = await Promise.all([
       context.supabase.from("profiles").select("*").eq("id", context.userId).maybeSingle(),
       context.supabase.from("subscriptions").select("*").eq("user_id", context.userId).maybeSingle(),
       context.supabase
@@ -208,10 +208,6 @@ export const getAccountOverview = createServerFn({ method: "GET" })
         .select("id, name, status, critical_count, high_count, medium_count, low_count, created_at, source_type, health_score")
         .order("created_at", { ascending: false })
         .limit(6),
-      context.supabase.rpc("noop_placeholder").then(
-        () => ({ data: null }),
-        () => ({ data: null }),
-      ),
     ]);
 
     const { count: totalAudits } = await context.supabase
