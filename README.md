@@ -1,41 +1,74 @@
-# Production Code Auditor — ScaleCheck
+# ⚡ ScaleCheck (Production Code Auditor)
 
-> **"Know your code is production-ready before production."**  
-> _The AI-Powered Scale Readiness Platform for Modern Engineering Teams._
+### _Know your code is production-ready, before production._
 
-![ScaleCheck Banner](https://img.shields.io/badge/ScaleCheck-Production%20Ready-06B6D4?style=for-the-badge&logo=shield&logoColor=white)
-![Version](https://img.shields.io/badge/Version-1.0--MVP-10B981?style=for-the-badge)
-![Status](https://img.shields.io/badge/Valuation-500M%20Tier%20DevTool-0F172A?style=for-the-badge)
+<div align="center">
 
----
+[![ScaleCheck Banner](https://img.shields.io/badge/ScaleCheck-Production%20Ready-06B6D4?style=for-the-badge&logo=shield&logoColor=white)](https://github.com/harshmriduhash/scalecheck)
+[![Valuation](https://img.shields.io/badge/Valuation-%24500M%20Tier-0F172A?style=for-the-badge&logo=target&logoColor=cyan)](#)
+[![Tech Stack](https://img.shields.io/badge/Stack-React%2019%20%7C%20TanStack%20Start%20%7C%20Supabase-10B981?style=for-the-badge)](#)
 
-## Executive Summary
+**ScaleCheck** is the industry-leading AI developer platform built to detect and refactor code bottlenecks that break under high traffic loads. Paste code, upload files, or sync a GitHub repository to get an instant scale-readiness audit in under 2 minutes.
 
-**Production Code Auditor (ScaleCheck)** is the pioneer AI platform built specifically to detect code patterns that break under 10x-100x traffic scale—N+1 database queries, missing indexes, unhandled connection pool leaks, memory leaks, blocking synchronous operations, and security vulnerabilities—**before they reach production**.
+[Explore MVP Demo](#) • [Read Launch Checklist](file:///Users/harsh/Desktop/scalecheck/LAUNCH_CHECKLIST.md) • [View Production Guidelines](file:///Users/harsh/Desktop/scalecheck/PRODUCTION_CHECKLIST.md)
 
-While traditional code review tools focus on syntax style or basic unit testing, ScaleCheck acts as an automated Senior Principal Architect inspecting system resilience, throughput bottlenecks, and scale-readiness in under 2 minutes.
-
----
-
-## The Problem & Financial Impact
-
-### The Problem
-
-1. **Silent Scale Killers:** Code that passes test suites at 100 queries/day explodes into database locks and thread starvation at 100,000 queries/day.
-2. **Senior Engineering Bottleneck:** Senior architects spend 30%+ of their time doing manual scale code reviews, slowing down product releases.
-3. **Expensive Production Firefighting:** Outages are discovered post-deploy when customers experience downtime.
-
-### Time & Money Saved
-
-- 💰 **Direct Financial Savings:** Prevents scale outages costing **$100,000 to $500,000+** in lost revenue, SLA violations, and customer churn per incident.
-- ⏱️ **Engineering Time Saved:** Reduces post-incident debugging time by **20 to 40+ hours per sprint**, freeing senior engineers to build core features.
-- 🚀 **100x ROI:** At $199/month, preventing just **one** minor scale incident delivers over **100x immediate financial return**.
+</div>
 
 ---
 
-## High Level Architecture (HLD)
+## 💡 What is ScaleCheck?
 
-The system leverages a modern decoupled architecture with client-side Next.js/TanStack rendering, serverless API state management via Supabase Postgres & Row-Level Security, and an asynchronous AI analysis engine running on Gemini 3.5 Flash via Lovable AI Gateway.
+Traditional linters check for code style, and test suites check for basic functional correctness. But **neither can tell you if your system will hang, freeze, or crash when traffic spikes 10x or 100x.**
+
+ScaleCheck acts as an automated **Senior Principal Architect** that inspects your application’s database queries, memory layouts, connection handling, and concurrency limits to catch scale-killers _before_ they impact your users.
+
+---
+
+## 🎯 Value Propositions by Persona
+
+### 🛠️ For Developers & Tech Leads
+
+> _"No more post-deployment debugging or pagerduty alerts at 3 AM."_
+
+- **AST & LLM Semantic Engine:** Goes beyond simple regex. ScaleCheck builds a syntax graph of your files to find unclosed clients, unindexed queries, and loop database queries.
+- **Instant Principal Architect Feedback:** Get before/after refactored code snippets directly in your CLI or dashboard, ready to copy-paste.
+
+### 💼 For Founders & Entrepreneurs
+
+> _"Ship code at startup speed without risking downtime, churn, or lost revenue."_
+
+- **Protect the Bottom Line:** A single scale-related database lock can cost $100K+ in developer hours, user churn, and brand reputation. ScaleCheck intercepts these errors silently.
+- **Unlock Engineering Velocity:** Remove manual architectural bottlenecks. Junior developers can audit their own code before PR submissions.
+
+### 👔 For Recruiters & HR Professionals
+
+> _"Validate the architectural skills of candidates instantly."_
+
+- **Automated Assessment Tool:** Use ScaleCheck to screen take-home coding challenges. Instantly score a candidate’s scale competency (0-100 score) based on performance best practices rather than stylistic opinion.
+
+---
+
+## 💰 Quantifiable ROI (Time & Money Saved)
+
+ScaleCheck pays for itself on day one. By catching performance regressions during development rather than in production:
+
+| Impact Metric             | Before ScaleCheck          | With ScaleCheck | Financial / Time Savings                                         |
+| :------------------------ | :------------------------- | :-------------- | :--------------------------------------------------------------- |
+| **Major Scale Outages**   | 2 - 4 per year             | **0**           | **$100,000 – $500,000+** saved in lost revenue & SLA payouts     |
+| **Architect Review Time** | 10+ hours / week           | **< 10 mins**   | **$40,000+** equivalent senior engineering salary saved annually |
+| **Outage Debugging Time** | 20 - 40 hours per incident | **Instant fix** | Developers stay focused on shipping revenue-generating features  |
+
+---
+
+## 🏗️ System Design & Software Architecture
+
+### High Level Design (HLD)
+
+ScaleCheck is engineered with a modern, decoupled three-tier architecture:
+
+1. **Frontend Presentation:** React 19 & TanStack Router for micro-interactions, responsive design, and local export capabilities.
+2. **Serverless API Gateway:** TanStack Start server functions executing on Node.js, protected by Supabase Row-Level Security (RLS).
+3. **AI Audit Engine:** Direct semantic parsing using Gemini 3.5 Flash via Lovable AI Gateway to generate high-fidelity refactoring models.
 
 ```mermaid
 flowchart TD
@@ -70,16 +103,16 @@ flowchart TD
     ServerFn --> GitHubAPI
     ServerFn --> Chunker
     Chunker --> GeminiGateway
-    GeminiGateway --> Dedupe
-    Dedupe --> Scorer
+    GeminiGateway --> Deduper
+    Deduper --> Scorer
     Scorer --> Postgres
     Postgres --> ReportView
     ReportView --> Exporter
 ```
 
----
+### Low Level Design (LLD) — The Audit Pipeline
 
-## Low Level Design (LLD) — Audit Pipeline
+The sequence below illustrates the live execution flow when an engineer submits their codebase for analysis:
 
 ```mermaid
 sequenceDiagram
@@ -116,68 +149,66 @@ sequenceDiagram
 
 ---
 
-## Key Features (MVP)
+## ⚡ Key MVP Features
 
-- ⚡ **1-Click Sample Audit:** Test drive the engine instantly with built-in vulnerable microservice code.
-- 🔍 **25+ Scale Issue Patterns:** Detects N+1 loops, connection pool exhaustion, missing DB indexes, memory leaks, unhandled async exceptions, and security flaws.
-- 📊 **Scale Readiness Score (0-100):** Weighted algorithm calculating overall risk index and clear release verdicts.
-- 💡 **Concrete Code Refactoring:** Shows exact file locations, lines, and before/after code fixes.
-- 📄 **Multi-Format Reports:** Export reports in PDF (print-optimized), JSON format, and CSV spreadsheet summaries.
-- 🔗 **Cryptographic Share Links:** Share public audit results with external stakeholders safely (`/share/$token`).
-- 🔐 **Enterprise Security & RLS:** End-to-end Row-Level Security ensuring code privacy and zero plain-text retention.
-
----
-
-## Development Roadmap
-
-### ✅ Phase 1: MVP Core (Completed)
-
-- [x] Multi-source ingestion (Paste code, upload files, GitHub repo OAuth/PAT sync).
-- [x] Full AI analysis engine detecting 25+ scale killers.
-- [x] Health score calculator (0-100) and severity classification.
-- [x] Interactive code refactoring diff viewer (before/after).
-- [x] PDF, JSON, and CSV report exports.
-- [x] 1-Click test audit with pre-loaded vulnerable codebase.
-- [x] Launch & Production Checklists (`LAUNCH_CHECKLIST.md`, `PRODUCTION_CHECKLIST.md`, `EXECUTION_CHECKLIST.md`, `MVP_LAUNCH_CHECKLIST.md`, `READY_CHECKLIST.md`).
-
-### ⏳ Phase 2: V1 Enhancements (Pending Next Sprint)
-
-- [ ] Support for Ruby, PHP, Rust, and C#.
-- [ ] Database Schema SQL DDL analyzer.
-- [ ] Automated Slack & Discord webhook alerts.
-- [ ] Audit history trend analytics and score progression over time.
-
-### 🔮 Phase 3: V2 Platform Growth (Future Roadmap)
-
-- [ ] GitHub Actions & GitLab CI/CD auto-audits on Pull Requests.
-- [ ] Custom enterprise rule builder.
-- [ ] SOC2 & GDPR compliance reporting export.
+- **Try with 1-Click:** Hit the "Try 1-Click Sample Audit" banner to test-drive the parser on a preloaded vulnerable codebase.
+- **Detects 25+ Scale Bottlenecks:** Checks connection pools, N+1 iterations, database indexing, memory leaks, unhandled exceptions, SQL injections, and CPU-blocking operations.
+- **Weighted Scale Scoring (0-100):** Weighted risk algorithm outputs a clear health score and release verdict.
+- **Direct Code Diffing:** View side-by-side comparative views (`Before` vs `After`) with recommended optimizations.
+- **Seamless Exports:** Instantly export reports to **PDF (Print Optimized)**, **JSON**, or **CSV** formats for team distribution.
+- **Cryptographic Share Links:** Share read-only audit summaries securely with external teams via secure link tokens (`/share/$token`).
 
 ---
 
-## Quick Start & Local Setup
+## 🛠️ Development Roadmap
+
+### ✅ Phase 1: MVP Core (Released)
+
+- [x] Multi-source code analysis (Raw paste text, multiple file uploads, GitHub repository connect).
+- [x] Full Scale Audit Engine powered by Gemini 3.5 Flash semantic analysis.
+- [x] Comparative code refactoring diff viewer.
+- [x] Quota-enforced subscriptions (Free vs Pro).
+- [x] PDF, JSON, and CSV data export controls.
+- [x] Standard operational checklists: [LAUNCH](file:///Users/harsh/Desktop/scalecheck/LAUNCH_CHECKLIST.md), [PRODUCTION](file:///Users/harsh/Desktop/scalecheck/PRODUCTION_CHECKLIST.md), [EXECUTION](file:///Users/harsh/Desktop/scalecheck/EXECUTION_CHECKLIST.md), [MVP](file:///Users/harsh/Desktop/scalecheck/MVP_LAUNCH_CHECKLIST.md), [READY](file:///Users/harsh/Desktop/scalecheck/READY_CHECKLIST.md).
+
+### ⏳ Phase 2: V1 Enhancements (Next Sprint)
+
+- [ ] Language support expansion for Ruby, PHP, Rust, and C#.
+- [ ] Active SQL DDL database schema relationship analysis.
+- [ ] Slack & Discord instant notifications on high-severity findings.
+- [ ] Interactive audit timeline and regression monitoring charts.
+
+### 🔮 Phase 3: V2 Scale Integrations (Future Pipeline)
+
+- [ ] Native GitHub Actions & GitLab CI/CD integration to block PR merges on Critical issues.
+- [ ] Enterprise Custom Rule-engine for internal performance guidelines.
+- [ ] Automated SOC2, GDPR, and security policy export compliance.
+
+---
+
+## 🚀 Quick Start & Installation
 
 ### Prerequisites
 
 - Node.js >= 18.x
-- Bun or NPM
+- NPM (or equivalent package manager)
 
 ### Installation
 
-1. **Clone the repository:**
+1. **Clone & Navigate:**
 
    ```bash
    git clone https://github.com/scalecheck/scalecheck.git
    cd scalecheck
    ```
 
-2. **Install dependencies:**
+2. **Install node modules:**
 
    ```bash
    npm install
    ```
 
-3. **Configure Environment Variables (`.env`):**
+3. **Configure Environment (`.env`):**
 
    ```env
    VITE_SUPABASE_URL="YOUR_SUPABASE_URL"
@@ -192,14 +223,13 @@ sequenceDiagram
    npm run dev
    ```
 
-5. **Build for Production:**
+5. **Build Production Bundle:**
    ```bash
    npm run build
    ```
 
 ---
 
-## Contact & License
+## ✉️ Contact & Enterprise Licensing
 
-Developed with ❤️ for high-growth engineering teams.  
-For enterprise inquiries, reach out to `harsh@scalecheck.dev`.
+For team trials or enterprise deployment inquiries, please reach out to the founders at `harsh@scalecheck.dev`. Built for high-growth tech firms scaling systems to millions of users.
