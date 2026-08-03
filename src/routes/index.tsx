@@ -35,7 +35,10 @@ function Landing() {
             scalecheck
           </div>
           <div className="flex items-center gap-2">
-            <Link to="/pricing" className="px-3 font-mono text-xs text-muted-foreground hover:text-foreground">
+            <Link
+              to="/pricing"
+              className="px-3 font-mono text-xs text-muted-foreground hover:text-foreground"
+            >
               Pricing
             </Link>
             <Button asChild size="sm">
@@ -77,9 +80,21 @@ function Landing() {
         <h2 className="text-2xl font-semibold tracking-tight">Three ways in</h2>
         <div className="mt-8 grid gap-4 md:grid-cols-3">
           {[
-            { icon: Terminal, title: "Paste code", body: "Drop a file's worth of code and get findings in seconds." },
-            { icon: Upload, title: "Upload files", body: "Send up to 20 source files from your service at once." },
-            { icon: Github, title: "Connect GitHub", body: "Audit a whole repository branch on demand." },
+            {
+              icon: Terminal,
+              title: "Paste code",
+              body: "Drop a file's worth of code and get findings in seconds.",
+            },
+            {
+              icon: Upload,
+              title: "Upload files",
+              body: "Send up to 20 source files from your service at once.",
+            },
+            {
+              icon: Github,
+              title: "Connect GitHub",
+              body: "Audit a whole repository branch on demand.",
+            },
           ].map((c) => (
             <div key={c.title} className="panel p-6">
               <c.icon className="size-5 text-primary" />

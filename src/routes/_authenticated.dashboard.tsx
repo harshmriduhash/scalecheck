@@ -11,9 +11,15 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
     meta: [
       { title: "Dashboard — ScaleCheck" },
-      { name: "description", content: "Your scale audit history, quota usage and critical issue counts." },
+      {
+        name: "description",
+        content: "Your scale audit history, quota usage and critical issue counts.",
+      },
       { property: "og:title", content: "Dashboard — ScaleCheck" },
-      { property: "og:description", content: "Your scale audit history, quota usage and critical issue counts." },
+      {
+        property: "og:description",
+        content: "Your scale audit history, quota usage and critical issue counts.",
+      },
     ],
   }),
   component: Dashboard,
@@ -27,7 +33,9 @@ function Dashboard() {
   });
 
   const stats = data?.stats;
-  const pct = stats ? Math.min(100, Math.round((stats.thisMonth / Math.max(stats.allowance, 1)) * 100)) : 0;
+  const pct = stats
+    ? Math.min(100, Math.round((stats.thisMonth / Math.max(stats.allowance, 1)) * 100))
+    : 0;
 
   return (
     <div className="space-y-8">
@@ -50,7 +58,11 @@ function Dashboard() {
           { label: "Audits run", value: stats?.totalAudits ?? 0, icon: Activity },
           { label: "Issues found", value: stats?.totalIssues ?? 0, icon: FileCode2 },
           { label: "Critical issues", value: stats?.criticalIssues ?? 0, icon: AlertOctagon },
-          { label: "Used this month", value: `${stats?.thisMonth ?? 0}/${stats?.allowance ?? 5}`, icon: Activity },
+          {
+            label: "Used this month",
+            value: `${stats?.thisMonth ?? 0}/${stats?.allowance ?? 5}`,
+            icon: Activity,
+          },
         ].map((card) => (
           <div key={card.label} className="panel p-5">
             <card.icon className="size-4 text-primary" />
@@ -85,7 +97,9 @@ function Dashboard() {
       <div>
         <h2 className="text-lg font-semibold tracking-tight">Recent audits</h2>
         <div className="mt-4 space-y-2">
-          {isLoading && <div className="panel p-5 font-mono text-xs text-muted-foreground">loading…</div>}
+          {isLoading && (
+            <div className="panel p-5 font-mono text-xs text-muted-foreground">loading…</div>
+          )}
           {!isLoading && !data?.recent.length && (
             <div className="panel p-8 text-center">
               <p className="text-sm text-muted-foreground">No audits yet.</p>
@@ -111,9 +125,12 @@ function Dashboard() {
                 <div className="flex items-center gap-2">
                   {audit.critical_count > 0 && <SeverityBadge severity="critical" />}
                   <span className="font-mono text-sm">
-                    {audit.critical_count + audit.high_count + audit.medium_count + audit.low_count} issues
+                    {audit.critical_count + audit.high_count + audit.medium_count + audit.low_count}{" "}
+                    issues
                   </span>
-                  <span className="font-mono text-sm text-primary">{audit.health_score ?? "—"}/100</span>
+                  <span className="font-mono text-sm text-primary">
+                    {audit.health_score ?? "—"}/100
+                  </span>
                 </div>
               ) : (
                 <span className="font-mono text-xs uppercase tracking-widest text-muted-foreground">

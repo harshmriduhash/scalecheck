@@ -83,7 +83,9 @@ function Settings() {
     <div className="mx-auto max-w-2xl space-y-6">
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Settings</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Connect a code source to audit repositories.</p>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Connect a code source to audit repositories.
+        </p>
       </div>
 
       <div className="panel space-y-4 p-6">
@@ -127,7 +129,8 @@ function Settings() {
                 className="font-mono text-xs"
               />
               <p className="font-mono text-[11px] text-muted-foreground">
-                Needs the <span className="text-foreground">repo</span> scope for private repositories.
+                Needs the <span className="text-foreground">repo</span> scope for private
+                repositories.
               </p>
               <Button size="sm" onClick={() => void savePat()} disabled={busy || pat.length < 20}>
                 Save token

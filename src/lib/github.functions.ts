@@ -16,7 +16,9 @@ export const getGithubStatus = createServerFn({ method: "GET" })
       connected: Boolean(data),
       login: (data?.github_login as string | null) ?? null,
       authKind: (data?.auth_kind as string | null) ?? null,
-      oauthAvailable: Boolean(process.env["GITHUB_CLIENT_ID"] && process.env["GITHUB_CLIENT_SECRET"]),
+      oauthAvailable: Boolean(
+        process.env["GITHUB_CLIENT_ID"] && process.env["GITHUB_CLIENT_SECRET"],
+      ),
     };
   });
 
@@ -27,7 +29,8 @@ export const getGithubAuthorizeUrl = createServerFn({ method: "POST" })
   )
   .handler(async ({ data }) => {
     const clientId = process.env["GITHUB_CLIENT_ID"];
-    if (!clientId) throw new Error("GitHub OAuth is not configured yet. Use a personal access token instead.");
+    if (!clientId)
+      throw new Error("GitHub OAuth is not configured yet. Use a personal access token instead.");
     const params = new URLSearchParams({
       client_id: clientId,
       redirect_uri: data.redirectUri,

@@ -13,9 +13,15 @@ export const Route = createFileRoute("/_authenticated/audits/$id")({
   head: () => ({
     meta: [
       { title: "Audit report — ScaleCheck" },
-      { name: "description", content: "Scale readiness report with severity breakdown and before/after fixes." },
+      {
+        name: "description",
+        content: "Scale readiness report with severity breakdown and before/after fixes.",
+      },
       { property: "og:title", content: "Audit report — ScaleCheck" },
-      { property: "og:description", content: "Scale readiness report with severity breakdown and before/after fixes." },
+      {
+        property: "og:description",
+        content: "Scale readiness report with severity breakdown and before/after fixes.",
+      },
     ],
   }),
   component: AuditDetail,
@@ -32,8 +38,7 @@ function AuditDetail() {
   const { data } = useQuery({
     queryKey: ["audit", id],
     queryFn: () => fetchAudit({ data: { id } }),
-    refetchInterval: (query) =>
-      query.state.data?.audit.status === "processing" ? 2500 : false,
+    refetchInterval: (query) => (query.state.data?.audit.status === "processing" ? 2500 : false),
   });
 
   const audit = data?.audit;
@@ -70,7 +75,10 @@ function AuditDetail() {
 
   return (
     <div className="space-y-6">
-      <Link to="/audits" className="inline-flex items-center gap-2 font-mono text-xs text-muted-foreground hover:text-foreground">
+      <Link
+        to="/audits"
+        className="inline-flex items-center gap-2 font-mono text-xs text-muted-foreground hover:text-foreground"
+      >
         <ArrowLeft className="size-3.5" /> back to history
       </Link>
 
@@ -97,7 +105,12 @@ function AuditDetail() {
       {audit.status === "completed" && (
         <>
           <div className="flex flex-wrap items-center justify-end gap-2">
-            <Button variant="outline" size="sm" onClick={() => void toggleShare()} disabled={sharing}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => void toggleShare()}
+              disabled={sharing}
+            >
               <Share2 className="size-4" />
               {audit.share_token ? "Disable sharing" : "Create share link"}
             </Button>
@@ -114,7 +127,12 @@ function AuditDetail() {
               </Button>
             )}
           </div>
-          <AuditReport audit={audit} issues={data.issues} onStatusChange={changeIssue} previous={data.previous} />
+          <AuditReport
+            audit={audit}
+            issues={data.issues}
+            onStatusChange={changeIssue}
+            previous={data.previous}
+          />
         </>
       )}
     </div>

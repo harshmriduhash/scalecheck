@@ -9,7 +9,7 @@ import {
 } from "./audit-engine.server";
 import type { Severity } from "./audit-types";
 
-type Admin = SupabaseClient<any, any, any>;
+type Admin = SupabaseClient;
 
 export async function ensureQuota(admin: Admin, userId: string) {
   const { data } = await admin

@@ -55,7 +55,9 @@ export const createAudit = createServerFn({ method: "POST" })
 export const runAudit = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) =>
-    z.object({ auditId: z.string().uuid(), files: z.array(fileSchema).max(60).optional() }).parse(data),
+    z
+      .object({ auditId: z.string().uuid(), files: z.array(fileSchema).max(60).optional() })
+      .parse(data),
   )
   .handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -186,7 +188,9 @@ export const setAuditShare = createServerFn({ method: "POST" })
 export const setIssueStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) =>
-    z.object({ id: z.string().uuid(), status: z.enum(["open", "resolved", "ignored"]) }).parse(data),
+    z
+      .object({ id: z.string().uuid(), status: z.enum(["open", "resolved", "ignored"]) })
+      .parse(data),
   )
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase
@@ -202,10 +206,16 @@ export const getAccountOverview = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     const [{ data: profile }, { data: sub }, { data: audits }] = await Promise.all([
       context.supabase.from("profiles").select("*").eq("id", context.userId).maybeSingle(),
-      context.supabase.from("subscriptions").select("*").eq("user_id", context.userId).maybeSingle(),
+      context.supabase
+        .from("subscriptions")
+        .select("*")
+        .eq("user_id", context.userId)
+        .maybeSingle(),
       context.supabase
         .from("audits")
-        .select("id, name, status, critical_count, high_count, medium_count, low_count, created_at, source_type, health_score")
+        .select(
+          "id, name, status, critical_count, high_count, medium_count, low_count, created_at, source_type, health_score",
+        )
         .order("created_at", { ascending: false })
         .limit(6),
     ]);

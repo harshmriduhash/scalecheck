@@ -15,8 +15,10 @@ async function gh<T>(token: string, path: string): Promise<T> {
   if (!res.ok) {
     const body = await res.text();
     console.error(`GitHub request failed [${res.status}] ${path}: ${body}`);
-    if (res.status === 401) throw new Error("GitHub token is invalid or expired. Reconnect GitHub in Settings.");
-    if (res.status === 403) throw new Error("GitHub rate limit or permission error. Try again shortly.");
+    if (res.status === 401)
+      throw new Error("GitHub token is invalid or expired. Reconnect GitHub in Settings.");
+    if (res.status === 403)
+      throw new Error("GitHub rate limit or permission error. Try again shortly.");
     throw new Error(`GitHub request failed (${res.status}).`);
   }
   return (await res.json()) as T;
@@ -37,7 +39,10 @@ export async function getViewer(token: string) {
 }
 
 export async function listRepos(token: string): Promise<GithubRepo[]> {
-  const repos = await gh<GithubRepo[]>(token, "user/repos?per_page=100&sort=updated&affiliation=owner,collaborator,organization_member");
+  const repos = await gh<GithubRepo[]>(
+    token,
+    "user/repos?per_page=100&sort=updated&affiliation=owner,collaborator,organization_member",
+  );
   return repos.map((r) => ({
     full_name: r.full_name,
     name: r.name,
@@ -52,8 +57,20 @@ export async function listRepos(token: string): Promise<GithubRepo[]> {
 type TreeEntry = { path: string; type: string; size?: number; sha: string };
 
 const SKIP_DIRS = [
-  "node_modules/", "dist/", "build/", ".next/", "vendor/", "test/", "tests/",
-  "__tests__/", "spec/", "coverage/", "migrations/", ".git/", "public/", "docs/",
+  "node_modules/",
+  "dist/",
+  "build/",
+  ".next/",
+  "vendor/",
+  "test/",
+  "tests/",
+  "__tests__/",
+  "spec/",
+  "coverage/",
+  "migrations/",
+  ".git/",
+  "public/",
+  "docs/",
 ];
 
 export async function collectRepoFiles(
@@ -98,7 +115,8 @@ export async function collectRepoFiles(
 export async function exchangeOAuthCode(code: string, redirectUri: string) {
   const clientId = process.env["GITHUB_CLIENT_ID"];
   const clientSecret = process.env["GITHUB_CLIENT_SECRET"];
-  if (!clientId || !clientSecret) throw new Error("GitHub OAuth is not configured on this deployment.");
+  if (!clientId || !clientSecret)
+    throw new Error("GitHub OAuth is not configured on this deployment.");
 
   const res = await fetch("https://github.com/login/oauth/access_token", {
     method: "POST",
@@ -111,7 +129,11 @@ export async function exchangeOAuthCode(code: string, redirectUri: string) {
     }),
   });
 
-  const data = (await res.json()) as { access_token?: string; scope?: string; error_description?: string };
+  const data = (await res.json()) as {
+    access_token?: string;
+    scope?: string;
+    error_description?: string;
+  };
   if (!data.access_token) {
     throw new Error(data.error_description ?? "GitHub did not return an access token.");
   }

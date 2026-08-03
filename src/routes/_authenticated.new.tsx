@@ -9,18 +9,30 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { createAudit, runAudit } from "@/lib/audits.functions";
 import { listGithubRepos } from "@/lib/github.functions";
-import { AUDITABLE_EXTENSIONS, LANGUAGES, detectLanguage } from "@/lib/audit-types";
+import { SAMPLE_VULNERABLE_CODE } from "@/lib/sample-code";
 
 export const Route = createFileRoute("/_authenticated/new")({
   head: () => ({
     meta: [
       { title: "New audit — ScaleCheck" },
-      { name: "description", content: "Paste code, upload source files or scan a GitHub repository for scale issues." },
+      {
+        name: "description",
+        content: "Paste code, upload source files or scan a GitHub repository for scale issues.",
+      },
       { property: "og:title", content: "New audit — ScaleCheck" },
-      { property: "og:description", content: "Paste code, upload source files or scan a GitHub repository for scale issues." },
+      {
+        property: "og:description",
+        content: "Paste code, upload source files or scan a GitHub repository for scale issues.",
+      },
     ],
   }),
   component: NewAudit,
@@ -66,6 +78,20 @@ function NewAudit() {
       toast.error(error instanceof Error ? error.message : "Could not start the audit.");
       setBusy(false);
     }
+  }
+
+  async function onSampleAudit() {
+    await start(
+      {
+        name: "E-Commerce User Service Sample",
+        sourceType: "paste",
+        language: "typescript",
+        filename: "user-service.ts",
+        fileCount: 1,
+        lineCount: SAMPLE_VULNERABLE_CODE.split("\n").length,
+      },
+      [{ path: "user-service.ts", content: SAMPLE_VULNERABLE_CODE }],
+    );
   }
 
   async function onPaste() {
@@ -134,11 +160,20 @@ function NewAudit() {
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">New audit</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Your code is analysed in memory and discarded once the report is written.
-        </p>
+      <div className="flex flex-wrap items-center justify-between gap-4 rounded-lg border border-primary/20 bg-primary/5 p-4">
+        <div>
+          <div className="text-sm font-medium text-foreground">
+            Want to see ScaleCheck in action?
+          </div>
+          <div className="text-xs text-muted-foreground">
+            Run an instant audit on a sample backend codebase containing N+1 queries, pool leaks,
+            and memory issues.
+          </div>
+        </div>
+        <Button size="sm" variant="default" onClick={() => void onSampleAudit()} disabled={busy}>
+          {busy ? <Loader2 className="size-3.5 animate-spin mr-1.5" /> : null}
+          Try 1-Click Sample Audit
+        </Button>
       </div>
 
       <Tabs defaultValue="paste">
@@ -187,7 +222,9 @@ function NewAudit() {
               className="font-mono text-xs"
               placeholder="// paste the service, route handler or worker you want audited"
             />
-            <p className="font-mono text-[11px] text-muted-foreground">{code.split("\n").length} lines</p>
+            <p className="font-mono text-[11px] text-muted-foreground">
+              {code.split("\n").length} lines
+            </p>
           </div>
           <Button onClick={() => void onPaste()} disabled={busy} className="w-full">
             {busy ? <Loader2 className="size-4 animate-spin" /> : null} Run audit
@@ -220,13 +257,20 @@ function NewAudit() {
               ))}
             </ul>
           )}
-          <Button onClick={() => void onUpload()} disabled={busy || !files.length} className="w-full">
-            {busy ? <Loader2 className="size-4 animate-spin" /> : null} Audit {files.length || ""} files
+          <Button
+            onClick={() => void onUpload()}
+            disabled={busy || !files.length}
+            className="w-full"
+          >
+            {busy ? <Loader2 className="size-4 animate-spin" /> : null} Audit {files.length || ""}{" "}
+            files
           </Button>
         </TabsContent>
 
         <TabsContent value="github" className="panel mt-4 space-y-4 p-5">
-          {repos.isLoading && <p className="font-mono text-xs text-muted-foreground">loading repositories…</p>}
+          {repos.isLoading && (
+            <p className="font-mono text-xs text-muted-foreground">loading repositories…</p>
+          )}
           {!repos.isLoading && !repos.data?.length && (
             <div className="space-y-3">
               <p className="text-sm text-muted-foreground">
@@ -256,8 +300,8 @@ function NewAudit() {
                 </Select>
               </div>
               <p className="font-mono text-[11px] text-muted-foreground">
-                We scan the default branch and pick the largest source files, skipping tests and vendor
-                directories.
+                We scan the default branch and pick the largest source files, skipping tests and
+                vendor directories.
               </p>
               <Button onClick={() => void onRepo()} disabled={busy || !repo} className="w-full">
                 {busy ? <Loader2 className="size-4 animate-spin" /> : null} Audit repository

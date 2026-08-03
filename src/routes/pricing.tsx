@@ -6,9 +6,17 @@ export const Route = createFileRoute("/pricing")({
   head: () => ({
     meta: [
       { title: "Pricing — ScaleCheck Code Auditor" },
-      { name: "description", content: "Free scale audits every month, with Pro and Enterprise tiers for teams shipping at volume." },
+      {
+        name: "description",
+        content:
+          "Free scale audits every month, with Pro and Enterprise tiers for teams shipping at volume.",
+      },
       { property: "og:title", content: "Pricing — ScaleCheck Code Auditor" },
-      { property: "og:description", content: "Free scale audits every month, with Pro and Enterprise tiers for teams shipping at volume." },
+      {
+        property: "og:description",
+        content:
+          "Free scale audits every month, with Pro and Enterprise tiers for teams shipping at volume.",
+      },
     ],
   }),
   component: Pricing,
@@ -74,7 +82,9 @@ function Pricing() {
               key={tier.name}
               className={`panel flex flex-col p-6 ${tier.highlight ? "border-primary/60 shadow-[0_0_40px_-20px_var(--color-primary)]" : ""}`}
             >
-              <div className="font-mono text-xs uppercase tracking-widest text-primary">{tier.name}</div>
+              <div className="font-mono text-xs uppercase tracking-widest text-primary">
+                {tier.name}
+              </div>
               <div className="mt-4 flex items-baseline gap-1">
                 <span className="text-4xl font-semibold">{tier.price}</span>
                 <span className="text-sm text-muted-foreground">{tier.unit}</span>
@@ -87,11 +97,7 @@ function Pricing() {
                   </li>
                 ))}
               </ul>
-              <Button
-                asChild
-                className="mt-8"
-                variant={tier.highlight ? "default" : "outline"}
-              >
+              <Button asChild className="mt-8" variant={tier.highlight ? "default" : "outline"}>
                 <Link to="/auth">{tier.cta}</Link>
               </Button>
             </div>

@@ -43,7 +43,12 @@ export function AuditReport({
   audit: Audit;
   issues: Issue[];
   onStatusChange?: (id: string, status: "open" | "resolved" | "ignored") => Promise<void> | void;
-  previous?: { critical_count: number; high_count: number; medium_count: number; low_count: number } | null;
+  previous?: {
+    critical_count: number;
+    high_count: number;
+    medium_count: number;
+    low_count: number;
+  } | null;
 }) {
   const [filter, setFilter] = useState<Severity | "all">("all");
   const counts: Record<Severity, number> = {
@@ -69,7 +74,9 @@ export function AuditReport({
               {audit.source_type} · {audit.language ?? "mixed"} · {audit.file_count ?? 0} files ·{" "}
               {audit.line_count ?? 0} lines · {new Date(audit.created_at).toLocaleString()}
             </p>
-            {audit.verdict && <p className="mt-4 max-w-xl text-sm text-muted-foreground">{audit.verdict}</p>}
+            {audit.verdict && (
+              <p className="mt-4 max-w-xl text-sm text-muted-foreground">{audit.verdict}</p>
+            )}
             {prevTotal !== null && (
               <p className="mt-2 font-mono text-[11px] text-muted-foreground">
                 previous run: {prevTotal} issues ({total - prevTotal >= 0 ? "+" : ""}
@@ -77,10 +84,77 @@ export function AuditReport({
               </p>
             )}
           </div>
-          <div className="text-right">
-            <div className="font-mono text-5xl text-primary">{audit.health_score ?? "—"}</div>
-            <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-              scale score
+          <div className="text-right flex flex-col items-end gap-3">
+            <div>
+              <div className="font-mono text-5xl text-primary">{audit.health_score ?? "—"}</div>
+              <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                scale score
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2 pt-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="font-mono text-xs"
+                onClick={() => window.print()}
+              >
+                Print / PDF
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="font-mono text-xs"
+                onClick={() => {
+                  const blob = new Blob([JSON.stringify({ audit, issues }, null, 2)], {
+                    type: "application/json",
+                  });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement("a");
+                  a.href = url;
+                  a.download = `audit-${audit.name.replace(/[^a-z0-9]/gi, "_")}.json`;
+                  a.click();
+                  URL.revokeObjectURL(url);
+                }}
+              >
+                Export JSON
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="font-mono text-xs"
+                onClick={() => {
+                  const headers = [
+                    "Severity",
+                    "Title",
+                    "File",
+                    "Line",
+                    "Type",
+                    "Description",
+                    "Impact",
+                    "Recommendation",
+                  ];
+                  const rows = issues.map((i) => [
+                    i.severity,
+                    `"${(i.title || "").replace(/"/g, '""')}"`,
+                    `"${(i.file_path || "").replace(/"/g, '""')}"`,
+                    i.line_number ?? "",
+                    i.type,
+                    `"${(i.description || "").replace(/"/g, '""')}"`,
+                    `"${(i.impact_description || "").replace(/"/g, '""')}"`,
+                    `"${(i.recommendation || "").replace(/"/g, '""')}"`,
+                  ]);
+                  const csv = [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
+                  const blob = new Blob([csv], { type: "text/csv" });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement("a");
+                  a.href = url;
+                  a.download = `audit-${audit.name.replace(/[^a-z0-9]/gi, "_")}.csv`;
+                  a.click();
+                  URL.revokeObjectURL(url);
+                }}
+              >
+                Export CSV
+              </Button>
             </div>
           </div>
         </div>
@@ -103,7 +177,9 @@ export function AuditReport({
               }`}
             >
               <div className="font-mono text-2xl leading-none">{counts[s]}</div>
-              <div className="mt-1 font-mono text-[10px] uppercase tracking-widest opacity-80">{s}</div>
+              <div className="mt-1 font-mono text-[10px] uppercase tracking-widest opacity-80">
+                {s}
+              </div>
             </button>
           ))}
         </div>
@@ -129,14 +205,21 @@ export function AuditReport({
                   <Button
                     variant={issue.status === "resolved" ? "default" : "ghost"}
                     size="sm"
-                    onClick={() => void onStatusChange(issue.id, issue.status === "resolved" ? "open" : "resolved")}
+                    onClick={() =>
+                      void onStatusChange(
+                        issue.id,
+                        issue.status === "resolved" ? "open" : "resolved",
+                      )
+                    }
                   >
                     Resolved
                   </Button>
                   <Button
                     variant={issue.status === "ignored" ? "default" : "ghost"}
                     size="sm"
-                    onClick={() => void onStatusChange(issue.id, issue.status === "ignored" ? "open" : "ignored")}
+                    onClick={() =>
+                      void onStatusChange(issue.id, issue.status === "ignored" ? "open" : "ignored")
+                    }
                   >
                     Ignore
                   </Button>
@@ -149,7 +232,9 @@ export function AuditReport({
               {issue.line_number ? `:${issue.line_number}` : ""} · {issue.type}
             </p>
 
-            {issue.description && <p className="mt-3 text-sm text-muted-foreground">{issue.description}</p>}
+            {issue.description && (
+              <p className="mt-3 text-sm text-muted-foreground">{issue.description}</p>
+            )}
             {issue.impact_description && (
               <p className="mt-2 text-sm text-high">At scale: {issue.impact_description}</p>
             )}
@@ -162,7 +247,9 @@ export function AuditReport({
 
             {issue.recommendation && (
               <p className="mt-4 text-sm">
-                <span className="font-mono text-[10px] uppercase tracking-widest text-primary">fix</span>{" "}
+                <span className="font-mono text-[10px] uppercase tracking-widest text-primary">
+                  fix
+                </span>{" "}
                 {issue.recommendation}
               </p>
             )}
@@ -171,7 +258,9 @@ export function AuditReport({
               <div className="mt-3 grid gap-3 md:grid-cols-2">
                 {issue.fix_code_before && (
                   <div>
-                    <div className="font-mono text-[10px] uppercase tracking-widest text-critical">before</div>
+                    <div className="font-mono text-[10px] uppercase tracking-widest text-critical">
+                      before
+                    </div>
                     <pre className="mt-1 overflow-x-auto rounded-md border border-critical/30 bg-critical/5 p-3 font-mono text-[11px]">
                       {issue.fix_code_before}
                     </pre>
@@ -179,7 +268,9 @@ export function AuditReport({
                 )}
                 {issue.fix_code_after && (
                   <div>
-                    <div className="font-mono text-[10px] uppercase tracking-widest text-primary">after</div>
+                    <div className="font-mono text-[10px] uppercase tracking-widest text-primary">
+                      after
+                    </div>
                     <pre className="mt-1 overflow-x-auto rounded-md border border-primary/30 bg-primary/5 p-3 font-mono text-[11px]">
                       {issue.fix_code_after}
                     </pre>

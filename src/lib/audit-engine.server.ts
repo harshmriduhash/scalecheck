@@ -69,7 +69,11 @@ function coerceSeverity(value: unknown): Severity {
 }
 
 function extractJson(text: string): unknown {
-  const trimmed = text.trim().replace(/^```(?:json)?/i, "").replace(/```$/, "").trim();
+  const trimmed = text
+    .trim()
+    .replace(/^```(?:json)?/i, "")
+    .replace(/```$/, "")
+    .trim();
   try {
     return JSON.parse(trimmed);
   } catch {
@@ -106,8 +110,10 @@ export async function analyseChunk(files: AnalysisFile[]): Promise<RawIssue[]> {
     }),
   });
 
-  if (response.status === 429) throw new Error("Analysis rate limit reached. Please try again in a minute.");
-  if (response.status === 402) throw new Error("AI credits exhausted. Top up your workspace to keep auditing.");
+  if (response.status === 429)
+    throw new Error("Analysis rate limit reached. Please try again in a minute.");
+  if (response.status === 402)
+    throw new Error("AI credits exhausted. Top up your workspace to keep auditing.");
   if (!response.ok) {
     const body = await response.text();
     console.error(`AI gateway failed [${response.status}]: ${body}`);
