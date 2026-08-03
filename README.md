@@ -8,7 +8,11 @@
 [![Valuation](https://img.shields.io/badge/Valuation-%24500M%20Tier-0F172A?style=for-the-badge&logo=target&logoColor=cyan)](#)
 [![Tech Stack](https://img.shields.io/badge/Stack-React%2019%20%7C%20TanStack%20Start%20%7C%20Supabase-10B981?style=for-the-badge)](#)
 
+</div>
+
 **ScaleCheck** is the industry-leading AI developer platform built to detect and refactor code bottlenecks that break under high traffic loads. Paste code, upload files, or sync a GitHub repository to get an instant scale-readiness audit in under 2 minutes.
+
+<div align="center">
 
 [Explore MVP Demo](#) • [Read Launch Checklist](file:///Users/harsh/Desktop/scalecheck/LAUNCH_CHECKLIST.md) • [View Production Guidelines](file:///Users/harsh/Desktop/scalecheck/PRODUCTION_CHECKLIST.md)
 
