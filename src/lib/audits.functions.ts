@@ -232,7 +232,7 @@ export const getAccountOverview = createServerFn({ method: "GET" })
         thisMonth: sub?.audits_used_this_month ?? 0,
         allowance: sub?.audits_per_month ?? 5,
       },
-      github: conn,
+      };
     };
   });
 
