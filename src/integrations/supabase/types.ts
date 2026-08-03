@@ -14,7 +14,245 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      audits: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          critical_count: number
+          error_message: string | null
+          file_count: number
+          filename: string | null
+          health_score: number | null
+          high_count: number
+          id: string
+          language: string | null
+          line_count: number
+          low_count: number
+          medium_count: number
+          name: string
+          progress: number
+          progress_label: string | null
+          repo_branch: string | null
+          repo_full_name: string | null
+          share_token: string | null
+          source_type: string
+          started_at: string
+          status: string
+          user_id: string
+          verdict: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          critical_count?: number
+          error_message?: string | null
+          file_count?: number
+          filename?: string | null
+          health_score?: number | null
+          high_count?: number
+          id?: string
+          language?: string | null
+          line_count?: number
+          low_count?: number
+          medium_count?: number
+          name: string
+          progress?: number
+          progress_label?: string | null
+          repo_branch?: string | null
+          repo_full_name?: string | null
+          share_token?: string | null
+          source_type?: string
+          started_at?: string
+          status?: string
+          user_id: string
+          verdict?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          critical_count?: number
+          error_message?: string | null
+          file_count?: number
+          filename?: string | null
+          health_score?: number | null
+          high_count?: number
+          id?: string
+          language?: string | null
+          line_count?: number
+          low_count?: number
+          medium_count?: number
+          name?: string
+          progress?: number
+          progress_label?: string | null
+          repo_branch?: string | null
+          repo_full_name?: string | null
+          share_token?: string | null
+          source_type?: string
+          started_at?: string
+          status?: string
+          user_id?: string
+          verdict?: string | null
+        }
+        Relationships: []
+      }
+      github_connections: {
+        Row: {
+          access_token: string
+          auth_kind: string
+          created_at: string
+          github_login: string | null
+          scope: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          access_token: string
+          auth_kind?: string
+          created_at?: string
+          github_login?: string | null
+          scope?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          access_token?: string
+          auth_kind?: string
+          created_at?: string
+          github_login?: string | null
+          scope?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      issues: {
+        Row: {
+          audit_id: string
+          code_snippet: string | null
+          created_at: string
+          description: string | null
+          file_path: string | null
+          fix_code_after: string | null
+          fix_code_before: string | null
+          id: string
+          impact_description: string | null
+          line_number: number | null
+          recommendation: string | null
+          severity: string
+          status: string
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          audit_id: string
+          code_snippet?: string | null
+          created_at?: string
+          description?: string | null
+          file_path?: string | null
+          fix_code_after?: string | null
+          fix_code_before?: string | null
+          id?: string
+          impact_description?: string | null
+          line_number?: number | null
+          recommendation?: string | null
+          severity: string
+          status?: string
+          title: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          audit_id?: string
+          code_snippet?: string | null
+          created_at?: string
+          description?: string | null
+          file_path?: string | null
+          fix_code_after?: string | null
+          fix_code_before?: string | null
+          id?: string
+          impact_description?: string | null
+          line_number?: number | null
+          recommendation?: string | null
+          severity?: string
+          status?: string
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "issues_audit_id_fkey"
+            columns: ["audit_id"]
+            isOneToOne: false
+            referencedRelation: "audits"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      subscriptions: {
+        Row: {
+          audits_per_month: number
+          audits_used_this_month: number
+          created_at: string
+          id: string
+          period_start: string
+          plan_id: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          audits_per_month?: number
+          audits_used_this_month?: number
+          created_at?: string
+          id?: string
+          period_start?: string
+          plan_id?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          audits_per_month?: number
+          audits_used_this_month?: number
+          created_at?: string
+          id?: string
+          period_start?: string
+          plan_id?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
