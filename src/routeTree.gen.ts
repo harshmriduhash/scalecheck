@@ -10,33 +10,145 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated.dashboard'
+import { Route as AuthenticatedNewRouteImport } from './routes/_authenticated.new'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated.settings'
+import { Route as ShareTokenRouteImport } from './routes/share.$token'
+import { Route as AuthenticatedAuditsIndexRouteImport } from './routes/_authenticated.audits.index'
+import { Route as AuthenticatedAuditsIdRouteImport } from './routes/_authenticated.audits.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedNewRoute = AuthenticatedNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const ShareTokenRoute = ShareTokenRouteImport.update({
+  id: '/share/$token',
+  path: '/share/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAuditsIndexRoute =
+  AuthenticatedAuditsIndexRouteImport.update({
+    id: '/audits/',
+    path: '/audits/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAuditsIdRoute = AuthenticatedAuditsIdRouteImport.update({
+  id: '/audits/$id',
+  path: '/audits/$id',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/pricing': typeof PricingRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/new': typeof AuthenticatedNewRoute
+  '/settings': typeof AuthenticatedSettingsRoute
+  '/share/$token': typeof ShareTokenRoute
+  '/audits/$id': typeof AuthenticatedAuditsIdRoute
+  '/audits/': typeof AuthenticatedAuditsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/pricing': typeof PricingRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/new': typeof AuthenticatedNewRoute
+  '/settings': typeof AuthenticatedSettingsRoute
+  '/share/$token': typeof ShareTokenRoute
+  '/audits/$id': typeof AuthenticatedAuditsIdRoute
+  '/audits': typeof AuthenticatedAuditsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/pricing': typeof PricingRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/new': typeof AuthenticatedNewRoute
+  '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/share/$token': typeof ShareTokenRoute
+  '/_authenticated/audits/$id': typeof AuthenticatedAuditsIdRoute
+  '/_authenticated/audits/': typeof AuthenticatedAuditsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/pricing'
+    | '/dashboard'
+    | '/new'
+    | '/settings'
+    | '/share/$token'
+    | '/audits/$id'
+    | '/audits/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/pricing'
+    | '/dashboard'
+    | '/new'
+    | '/settings'
+    | '/share/$token'
+    | '/audits/$id'
+    | '/audits'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/pricing'
+    | '/_authenticated/dashboard'
+    | '/_authenticated/new'
+    | '/_authenticated/settings'
+    | '/share/$token'
+    | '/_authenticated/audits/$id'
+    | '/_authenticated/audits/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  PricingRoute: typeof PricingRoute
+  ShareTokenRoute: typeof ShareTokenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,22 +160,99 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/new': {
+      id: '/_authenticated/new'
+      path: '/new'
+      fullPath: '/new'
+      preLoaderRoute: typeof AuthenticatedNewRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/share/$token': {
+      id: '/share/$token'
+      path: '/share/$token'
+      fullPath: '/share/$token'
+      preLoaderRoute: typeof ShareTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/audits/': {
+      id: '/_authenticated/audits/'
+      path: '/audits'
+      fullPath: '/audits/'
+      preLoaderRoute: typeof AuthenticatedAuditsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/audits/$id': {
+      id: '/_authenticated/audits/$id'
+      path: '/audits/$id'
+      fullPath: '/audits/$id'
+      preLoaderRoute: typeof AuthenticatedAuditsIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
+interface AuthenticatedRouteChildren {
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedNewRoute: typeof AuthenticatedNewRoute
+  AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
+  AuthenticatedAuditsIdRoute: typeof AuthenticatedAuditsIdRoute
+  AuthenticatedAuditsIndexRoute: typeof AuthenticatedAuditsIndexRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedNewRoute: AuthenticatedNewRoute,
+  AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
+  AuthenticatedAuditsIdRoute: AuthenticatedAuditsIdRoute,
+  AuthenticatedAuditsIndexRoute: AuthenticatedAuditsIndexRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  AuthRoute: AuthRoute,
+  PricingRoute: PricingRoute,
+  ShareTokenRoute: ShareTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
