@@ -15,6 +15,8 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated.dashboard'
 import { Route as AuthenticatedNewRouteImport } from './routes/_authenticated.new'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated.settings'
+import { Route as ShareTokenRouteImport } from './routes/share.$token'
 import { Route as AuthenticatedAuditsIndexRouteImport } from './routes/_authenticated.audits.index'
 import { Route as AuthenticatedAuditsIdRouteImport } from './routes/_authenticated.audits.$id'
 
@@ -47,6 +49,16 @@ const AuthenticatedNewRoute = AuthenticatedNewRouteImport.update({
   path: '/new',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const ShareTokenRoute = ShareTokenRouteImport.update({
+  id: '/share/$token',
+  path: '/share/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAuditsIndexRoute =
   AuthenticatedAuditsIndexRouteImport.update({
     id: '/audits/',
@@ -65,6 +77,8 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof PricingRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/new': typeof AuthenticatedNewRoute
+  '/settings': typeof AuthenticatedSettingsRoute
+  '/share/$token': typeof ShareTokenRoute
   '/audits/$id': typeof AuthenticatedAuditsIdRoute
   '/audits/': typeof AuthenticatedAuditsIndexRoute
 }
@@ -74,6 +88,8 @@ export interface FileRoutesByTo {
   '/pricing': typeof PricingRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/new': typeof AuthenticatedNewRoute
+  '/settings': typeof AuthenticatedSettingsRoute
+  '/share/$token': typeof ShareTokenRoute
   '/audits/$id': typeof AuthenticatedAuditsIdRoute
   '/audits': typeof AuthenticatedAuditsIndexRoute
 }
@@ -85,6 +101,8 @@ export interface FileRoutesById {
   '/pricing': typeof PricingRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/new': typeof AuthenticatedNewRoute
+  '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/share/$token': typeof ShareTokenRoute
   '/_authenticated/audits/$id': typeof AuthenticatedAuditsIdRoute
   '/_authenticated/audits/': typeof AuthenticatedAuditsIndexRoute
 }
@@ -96,6 +114,8 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/dashboard'
     | '/new'
+    | '/settings'
+    | '/share/$token'
     | '/audits/$id'
     | '/audits/'
   fileRoutesByTo: FileRoutesByTo
@@ -105,6 +125,8 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/dashboard'
     | '/new'
+    | '/settings'
+    | '/share/$token'
     | '/audits/$id'
     | '/audits'
   id:
@@ -115,6 +137,8 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/_authenticated/dashboard'
     | '/_authenticated/new'
+    | '/_authenticated/settings'
+    | '/share/$token'
     | '/_authenticated/audits/$id'
     | '/_authenticated/audits/'
   fileRoutesById: FileRoutesById
@@ -124,6 +148,7 @@ export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AuthRoute: typeof AuthRoute
   PricingRoute: typeof PricingRoute
+  ShareTokenRoute: typeof ShareTokenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -170,6 +195,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedNewRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/share/$token': {
+      id: '/share/$token'
+      path: '/share/$token'
+      fullPath: '/share/$token'
+      preLoaderRoute: typeof ShareTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/audits/': {
       id: '/_authenticated/audits/'
       path: '/audits'
@@ -190,6 +229,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedNewRoute: typeof AuthenticatedNewRoute
+  AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedAuditsIdRoute: typeof AuthenticatedAuditsIdRoute
   AuthenticatedAuditsIndexRoute: typeof AuthenticatedAuditsIndexRoute
 }
@@ -197,6 +237,7 @@ interface AuthenticatedRouteChildren {
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedNewRoute: AuthenticatedNewRoute,
+  AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedAuditsIdRoute: AuthenticatedAuditsIdRoute,
   AuthenticatedAuditsIndexRoute: AuthenticatedAuditsIndexRoute,
 }
@@ -210,6 +251,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AuthRoute: AuthRoute,
   PricingRoute: PricingRoute,
+  ShareTokenRoute: ShareTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
